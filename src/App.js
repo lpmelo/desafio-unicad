@@ -1,23 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { Menu, Segment, Icon } from "semantic-ui-react";
+import { useState } from "react";
+import iconHome from "./components/icons/iconHome";
 
 function App() {
+  const [activeItem, setActiveItem] = useState("home");
+
+  const handleItemClick = (e, { name }) => {
+    setActiveItem(name);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="header-container">
+        <Segment inverted>
+          <Menu inverted pointing secondary>
+            <Menu.Item
+              name="home"
+              icon={iconHome}
+              active={activeItem === "home"}
+              onClick={handleItemClick}
+            />
+            <Menu.Item
+              name="messages"
+              active={activeItem === "messages"}
+              onClick={handleItemClick}
+            />
+            <Menu.Item
+              name="friends"
+              active={activeItem === "friends"}
+              onClick={handleItemClick}
+            />
+          </Menu>
+        </Segment>
+      </div>
     </div>
   );
 }
