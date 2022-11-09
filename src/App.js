@@ -1,25 +1,70 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { Menu, Segment } from "semantic-ui-react";
+import { useEffect, useState } from "react";
+import iconHome from "./components/icons/iconHome";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  switchToHome,
+  switchToRegisterDelivery,
+  switchToTableDelivery,
+} from "./features/pageSwitcher/pageSwitcherSlice";
+import HomePage from "./components/pages/HomePage";
 
-function App() {
+const App = () => {
+  const [activeItem, setActiveItem] = useState("home");
+  const pageElementSwitcher = useSelector((state) => state.pageSwitcher.item);
+  const dispatch = useDispatch();
+  const returnPageContent = (pageElementNumber) => {
+    const index = {
+      0: <HomePage />,
+      1: <HomePage />,
+      2: <HomePage />,
+    };
+
+    const formattedIndex = index[pageElementNumber];
+    return formattedIndex;
+  };
+
+  const handleItemClick = (e, { name }) => {
+    name === "home"
+      ? dispatch(switchToHome())
+      : name === "messages"
+      ? dispatch(switchToRegisterDelivery())
+      : dispatch(switchToTableDelivery());
+
+    setActiveItem(name);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="header-container">
+        <Segment inverted>
+          <Menu inverted pointing secondary>
+            <Menu.Item
+              name="home"
+              icon={iconHome}
+              active={activeItem === "home"}
+              onClick={handleItemClick}
+            />
+            <Menu.Item
+              name="messages"
+              active={activeItem === "messages"}
+              onClick={handleItemClick}
+            />
+            <Menu.Item
+              name="friends"
+              active={activeItem === "friends"}
+              onClick={handleItemClick}
+            />
+          </Menu>
+        </Segment>
+      </div>
+      <div className="content-container">
+        {returnPageContent(pageElementSwitcher)}
+      </div>
+      <div className="footer-container"></div>
     </div>
   );
-}
+};
 
 export default App;
