@@ -9,9 +9,21 @@
   box-shadow: 1px 1px 3px #ddd9d9;
   border-color: rgb(226, 216, 216);
   margin: 10px;
+  align-items: flex-end;
 }
 
 .form {
-  margin-top: 20px;
+  margin-top: 30px;
   text-align: left;
+}
+
+.row-form {
+  justify-content: right !important;
+}
+
+.btn-submit {
+  position: inherit;
+  top: 18.3%;
+  right: 23px;
+  z-index: 1;
 }

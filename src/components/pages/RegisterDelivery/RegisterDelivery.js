@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Grid, Segment } from "semantic-ui-react";
+import { Button, Form, Grid, Segment } from "semantic-ui-react";
 import "./RegisterDelivery.css";
 import iconSearch from "../../icons/iconSearch";
 import {
@@ -16,6 +16,7 @@ import {
 } from "./features/registerDeliverySlice";
 import { getCep } from "../../../ApiCep";
 import iconUserCicle from "../../icons/iconUserCicle";
+import iconPlus from "../../icons/iconPlus";
 
 const RegisterDelivery = () => {
   const [haveError, setHasError] = useState(false);
@@ -74,7 +75,12 @@ const RegisterDelivery = () => {
               <h1>Cadastrar nova entrega</h1>
             </Grid.Column>
           </Grid.Row>
-          <Grid.Row columns={1}>
+          <Grid.Row className="row-form" columns={1}>
+            <Button
+              icon={iconPlus}
+              content="Incluir"
+              className="btn-submit"
+            ></Button>
             <Grid.Column className="container-form">
               <Form className="form">
                 <Form.Group>
