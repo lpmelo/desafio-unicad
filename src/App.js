@@ -1,6 +1,6 @@
 import "./App.css";
 import { Menu, Segment } from "semantic-ui-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import iconHome from "./components/icons/iconHome";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -8,7 +8,10 @@ import {
   switchToRegisterDelivery,
   switchToTableDelivery,
 } from "./features/pageSwitcher/pageSwitcherSlice";
-import HomePage from "./components/pages/HomePage";
+import HomePage from "./components/pages/HomePage/HomePage";
+import RegisterDelivery from "./components/pages/RegisterDelivery/RegisterDelivery";
+import iconBox from "./components/icons/iconBox";
+import iconEye from "./components/icons/iconEye";
 
 const App = () => {
   const [activeItem, setActiveItem] = useState("home");
@@ -17,7 +20,7 @@ const App = () => {
   const returnPageContent = (pageElementNumber) => {
     const index = {
       0: <HomePage />,
-      1: <HomePage />,
+      1: <RegisterDelivery />,
       2: <HomePage />,
     };
 
@@ -28,7 +31,7 @@ const App = () => {
   const handleItemClick = (e, { name }) => {
     name === "home"
       ? dispatch(switchToHome())
-      : name === "messages"
+      : name === "Cadastro de entregas"
       ? dispatch(switchToRegisterDelivery())
       : dispatch(switchToTableDelivery());
 
@@ -47,13 +50,15 @@ const App = () => {
               onClick={handleItemClick}
             />
             <Menu.Item
-              name="messages"
-              active={activeItem === "messages"}
+              name="Cadastro de entregas"
+              icon={iconBox}
+              active={activeItem === "Cadastro de entregas"}
               onClick={handleItemClick}
             />
             <Menu.Item
-              name="friends"
-              active={activeItem === "friends"}
+              name="Visualizar entregas"
+              icon={iconEye}
+              active={activeItem === "Visualizar entregas"}
               onClick={handleItemClick}
             />
           </Menu>
