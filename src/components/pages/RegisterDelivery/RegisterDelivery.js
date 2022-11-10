@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Form, Grid, Segment } from "semantic-ui-react";
+import { Button, Form, Grid, Message, Segment } from "semantic-ui-react";
 import "./RegisterDelivery.css";
 import iconSearch from "../../icons/iconSearch";
 import {
@@ -17,9 +17,12 @@ import {
 import { getCep } from "../../../ApiCep";
 import iconUserCicle from "../../icons/iconUserCicle";
 import iconPlus from "../../icons/iconPlus";
+import { postNewDelivery } from "../../../Api";
+import { v4 as uuidv4 } from "uuid";
 
 const RegisterDelivery = () => {
   const [haveError, setHasError] = useState(false);
+  const [success, setSucess] = useState(false);
   const [hasValue, setHasValue] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
   const formValues = useSelector((state) => state.registerDelivery);
@@ -28,6 +31,11 @@ const RegisterDelivery = () => {
 
   const threatResponseData = (response) => {
     dispatch(saveGetResponse(response));
+  };
+
+  const onSucess = () => {
+    dispatch(clearState(""));
+    setSucess(true);
   };
 
   const handleChange = (event, field) => {
@@ -55,6 +63,23 @@ const RegisterDelivery = () => {
     }
   };
 
+  const handleSubmit = () => {
+    const newId = uuidv4();
+
+    postNewDelivery(
+      newId,
+      formValues.clientName,
+      formValues.deliveryDate,
+      formValues.cep,
+      formValues.uf,
+      formValues.city,
+      formValues.district,
+      formValues.address,
+      formValues.number,
+      formValues.complement
+    ).then((res) => (res.data ? onSucess() : console.log("erro")));
+  };
+
   useEffect(() => {
     dispatch(clearState(""));
   }, [activePage]);
@@ -73,6 +98,13 @@ const RegisterDelivery = () => {
           <Grid.Row columns={1}>
             <Grid.Column className="register-title">
               <h1>Cadastrar nova entrega</h1>
+              {success && (
+                <Message
+                  success
+                  header="Entrega cadastrada com sucesso!"
+                  content="Sua entrega foi cadastrada com sucesso, para visualiza-la, acesse a aba 'Visualizar entregas'"
+                />
+              )}
             </Grid.Column>
           </Grid.Row>
           <Grid.Row className="row-form" columns={1}>
@@ -80,6 +112,7 @@ const RegisterDelivery = () => {
               icon={iconPlus}
               content="Incluir"
               className="btn-submit"
+              onClick={() => handleSubmit()}
             ></Button>
             <Grid.Column className="container-form">
               <Form className="form">
@@ -87,7 +120,6 @@ const RegisterDelivery = () => {
                   <Form.Input
                     id="clientName"
                     placeholder="Nome do Cliente"
-                    error={haveError ? cepError : haveError}
                     fluid
                     width={8}
                     icon={iconUserCicle}
