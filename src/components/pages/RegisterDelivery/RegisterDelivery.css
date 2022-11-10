@@ -1,0 +1,17 @@
+.register-title {
+  text-align: left;
+}
+
+.container-form {
+  border-width: 0.5px;
+  border-style: solid;
+  border-radius: 1%;
+  box-shadow: 1px 1px 3px #ddd9d9;
+  border-color: rgb(226, 216, 216);
+  margin: 10px;
+}
+
+.form {
+  margin-top: 20px;
+  text-align: left;
+}
