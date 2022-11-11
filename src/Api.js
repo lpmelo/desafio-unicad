@@ -14,7 +14,7 @@ export const postNewDelivery = async (
 ) => {
   try {
     const res = await axios.post(
-      `http://localhost:3333/deliveries/`,
+      `https://unicad-desafio-fullstack-api.herokuapp.com/deliveries`,
       {
         clientName,
         deliveryDate,
@@ -43,7 +43,10 @@ export const postNewDelivery = async (
 
 export const getAllDeliveries = async () => {
   try {
-    const res = await axios.get(`http://localhost:3333/deliveries`, {});
+    const res = await axios.get(
+      `https://unicad-desafio-fullstack-api.herokuapp.com/deliveries`,
+      {}
+    );
 
     if (res.data) {
       return res.data;
