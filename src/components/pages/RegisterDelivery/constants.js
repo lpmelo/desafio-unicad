@@ -1,6 +1,6 @@
 export const cepError = {
   content: "Por favor, insira o cep corretamente",
-  pointing: "below",
+  pointing: "above",
 };
 
 export const formInitialState = {
@@ -43,6 +43,31 @@ const genericValidation = (value) => {
   return false;
 };
 
+const errorMessage = (fieldName) => {
+  const allErrors = {
+    clientName: "Campo obrigatório",
+    deliveryDate: "Campo obrigatório",
+    cep: cepError,
+    uf: "Campo obrigatório",
+    city: "Campo obrigatório",
+    district: "Campo obrigatório",
+    address: "Campo obrigatório",
+    number: "Campo obrigatório",
+  };
+
+  const errorMessage = allErrors[fieldName];
+  return errorMessage;
+};
+
+export const isValidCep = (fieldName, fieldLenght) => {
+  if (fieldName === "cep") {
+    if (fieldLenght === 8) {
+      return true;
+    }
+  }
+  return false;
+};
+
 export const validateFields = (fieldId, fieldValue) => {
   const fieldsId = {
     clientName: () => genericValidation(fieldValue),
@@ -74,7 +99,7 @@ export const fieldsWithErrors = (allFieldIds, state) => {
   errorFields.map((error) => {
     formattedFieldError = {
       ...formattedFieldError,
-      [error]: `Campo Obrigatório`,
+      [error]: errorMessage(error),
     };
   });
 

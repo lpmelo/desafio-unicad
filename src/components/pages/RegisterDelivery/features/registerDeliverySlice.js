@@ -6,11 +6,11 @@ export const registerDeliverySlice = createSlice({
   initialState: formInitialState,
   reducers: {
     saveGetResponse: (state, action) => {
-      state.uf = action.payload.uf;
-      state.city = action.payload.localidade;
-      state.district = action.payload.bairro;
-      state.address = action.payload.logradouro;
-      state.complement = action.payload.complemento;
+      state.formData.uf = action.payload.uf;
+      state.formData.city = action.payload.localidade;
+      state.formData.district = action.payload.bairro;
+      state.formData.address = action.payload.logradouro;
+      state.formData.complement = action.payload.complemento;
     },
     changeValue: (state, action) => {
       state.formData[action.payload.field] = action.payload.changedValue;

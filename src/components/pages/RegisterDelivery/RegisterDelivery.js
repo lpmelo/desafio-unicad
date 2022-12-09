@@ -6,6 +6,7 @@ import iconSearch from "../../icons/iconSearch";
 import {
   cepError,
   fieldsWithErrors,
+  isValidCep,
   requiredFields,
   validateCep,
   validateFields,
@@ -79,7 +80,8 @@ const RegisterDelivery = () => {
         setHasError(true);
       }
     }
-    if (event.target.value.length === 8) {
+
+    if (isValidCep(event.target.name, event.target.value.length)) {
       setHasError(false);
       getCep(event.target.value).then((res) => threatResponseData(res));
       setHasValue(true);
@@ -194,6 +196,7 @@ const RegisterDelivery = () => {
                   </Form.Field>
                   <Form.Input
                     id="cep"
+                    name="cep"
                     placeholder="CEP"
                     error={messages.cep && messages.cep}
                     fluid
@@ -212,6 +215,7 @@ const RegisterDelivery = () => {
                     id="city"
                     label={hasValue ? "Cidade" : false}
                     placeholder="Cidade"
+                    error={hasValue && messages.city && messages.city}
                     width={6}
                     value={formValues.city}
                     onChange={(e) => handleChange(e, "city")}
@@ -222,6 +226,7 @@ const RegisterDelivery = () => {
                     id="uf"
                     label={hasValue ? "UF" : false}
                     placeholder="UF"
+                    error={hasValue && messages.uf && messages.uf}
                     width={2}
                     value={formValues.uf}
                     onChange={(e) => handleChange(e, "uf")}
@@ -232,6 +237,7 @@ const RegisterDelivery = () => {
                     id="address"
                     label={hasValue ? "Rua" : false}
                     placeholder="Rua"
+                    error={hasValue && messages.address && messages.address}
                     width={6}
                     value={formValues.address}
                     onChange={(e) => handleChange(e, "address")}
@@ -242,6 +248,7 @@ const RegisterDelivery = () => {
                     id="number"
                     label={hasValue ? "Número" : false}
                     placeholder="Número"
+                    error={hasValue && messages.number && messages.number}
                     width={2}
                     value={formValues.number}
                     disabled={isDisabled}
@@ -254,10 +261,12 @@ const RegisterDelivery = () => {
                     id="district"
                     label={hasValue ? "Bairro" : false}
                     placeholder="Bairro"
+                    error={hasValue && messages.district && messages.district}
                     width={8}
                     value={formValues.district}
                     onChange={(e) => handleChange(e, "district")}
                     disabled={isDisabled}
+                    required
                   />
                   <Form.Input
                     id="complement"
