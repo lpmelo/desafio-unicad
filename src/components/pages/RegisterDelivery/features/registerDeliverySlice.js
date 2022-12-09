@@ -13,22 +13,33 @@ export const registerDeliverySlice = createSlice({
       state.complement = action.payload.complemento;
     },
     changeValue: (state, action) => {
-      state[action.payload.field] = action.payload.changedValue;
+      state.formData[action.payload.field] = action.payload.changedValue;
     },
     clearState: (state, action) => {
-      state.clientName = action.payload;
-      state.deliveryDate = action.payload;
-      state.cep = action.payload;
-      state.uf = action.payload;
-      state.city = action.payload;
-      state.district = action.payload;
-      state.address = action.payload;
-      state.number = action.payload;
-      state.complement = action.payload;
+      state.formData.clientName = action.payload;
+      state.formData.deliveryDate = action.payload;
+      state.formData.cep = action.payload;
+      state.formData.uf = action.payload;
+      state.formData.city = action.payload;
+      state.formData.district = action.payload;
+      state.formData.address = action.payload;
+      state.formData.number = action.payload;
+      state.formData.complement = action.payload;
+    },
+    changeMessages: (state, action) => {
+      state.messages = action.payload;
+    },
+    clearMessages: (state, action) => {
+      state.messages = {};
     },
   },
 });
 
-export const { changeValue, saveGetResponse, clearState } =
-  registerDeliverySlice.actions;
+export const {
+  changeValue,
+  saveGetResponse,
+  clearState,
+  changeMessages,
+  clearMessages,
+} = registerDeliverySlice.actions;
 export const registerDeliveryReducer = registerDeliverySlice.reducer;

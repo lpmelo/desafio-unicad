@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, Grid, Message, Segment } from "semantic-ui-react";
+import { DateInput } from "semantic-ui-calendar-react";
 import "./RegisterDelivery.css";
 import iconSearch from "../../icons/iconSearch";
 import {
   cepError,
+  fieldsWithErrors,
   requiredFields,
   validateCep,
   validateFields,
@@ -13,6 +15,8 @@ import {
   changeValue,
   clearState,
   saveGetResponse,
+  changeMessages,
+  clearMessages,
 } from "./features/registerDeliverySlice";
 import { getCep } from "../../../ApiCep";
 import iconUserCicle from "../../icons/iconUserCicle";
@@ -23,9 +27,11 @@ import { v4 as uuidv4 } from "uuid";
 const RegisterDelivery = () => {
   const [haveError, setHasError] = useState(false);
   const [success, setSucess] = useState(false);
+  const [failed, setFailed] = useState(false);
   const [hasValue, setHasValue] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
-  const formValues = useSelector((state) => state.registerDelivery);
+  const formValues = useSelector((state) => state.registerDelivery.formData);
+  const messages = useSelector((state) => state.registerDelivery.messages);
   const activePage = useSelector((state) => state.pageSwitcher.item);
   const dispatch = useDispatch();
 
@@ -38,11 +44,31 @@ const RegisterDelivery = () => {
     setSucess(true);
   };
 
+  const hasError = (errorFields) => {
+    dispatch(changeMessages({ ...errorFields }));
+  };
+
+  const verifyData = (keys) => {
+    const fieldsWithError = fieldsWithErrors(keys, formValues);
+    hasError(fieldsWithError);
+  };
+
+  const handleClearDate = (event, { name, value }) => {
+    dispatch(changeValue({ changedValue: "", field: name }));
+  };
+
+  const handleChangeDate = (event, { name, value }) => {
+    if (value) {
+      dispatch(changeValue({ changedValue: value, field: name }));
+    }
+  };
+
   const handleChange = (event, field) => {
     const value = event.target.value;
+    console.log(event.target);
     if (field === "cep" && value.length < 9) {
       dispatch(changeValue({ changedValue: value, field }));
-    } else if (field !== "cep" && value.length) {
+    } else if (field !== "cep") {
       dispatch(changeValue({ changedValue: value, field }));
     }
   };
@@ -64,24 +90,33 @@ const RegisterDelivery = () => {
   };
 
   const handleSubmit = () => {
-    const newId = uuidv4();
+    const formKeys = Object.keys(formValues);
+    verifyData(formKeys);
 
-    postNewDelivery(
-      newId,
-      formValues.clientName,
-      formValues.deliveryDate,
-      formValues.cep,
-      formValues.uf,
-      formValues.city,
-      formValues.district,
-      formValues.address,
-      formValues.number,
-      formValues.complement
-    ).then((res) => (res.data ? onSucess() : console.log("erro")));
+    if (haveError) {
+      setFailed(true);
+    } else {
+      setFailed(false);
+      // const newId = uuidv4();
+
+      // postNewDelivery(
+      //   newId,
+      //   formValues.clientName,
+      //   formValues.deliveryDate,
+      //   formValues.cep,
+      //   formValues.uf,
+      //   formValues.city,
+      //   formValues.district,
+      //   formValues.address,
+      //   formValues.number,
+      //   formValues.complement
+      // ).then((res) => (res.data ? onSucess() : console.log("erro")));
+    }
   };
 
   useEffect(() => {
     dispatch(clearState(""));
+    dispatch(clearMessages());
   }, [activePage]);
 
   useEffect(() => {
@@ -102,7 +137,15 @@ const RegisterDelivery = () => {
                 <Message
                   success
                   header="Entrega cadastrada com sucesso!"
-                  content="Sua entrega foi cadastrada com sucesso, para visualiza-la, acesse a aba 'Visualizar entregas'"
+                  content={`Sua entrega foi cadastrada com sucesso, para visualiza-la, acesse a aba 'Visualizar Entregas'`}
+                />
+              )}
+
+              {failed && (
+                <Message
+                  error
+                  header="Existem erros no preenchimento do cadastro!"
+                  content={`Existem erros no preenchimento do cadastro, por favor verifique e preencha corretamente`}
                 />
               )}
             </Grid.Column>
@@ -120,6 +163,7 @@ const RegisterDelivery = () => {
                   <Form.Input
                     id="clientName"
                     placeholder="Nome do Cliente"
+                    error={messages.clientName && messages.clientName}
                     fluid
                     width={8}
                     icon={iconUserCicle}
@@ -132,22 +176,26 @@ const RegisterDelivery = () => {
                   />
 
                   <Form.Field width={4}>
-                    <label>Data da entrega</label>
-                    <input
+                    <DateInput
                       id="deliveryDate"
                       name="deliveryDate"
-                      type="date"
+                      label="Data da entrega"
+                      clearable
+                      onClear={handleClearDate}
+                      error={messages.deliveryDate && messages.deliveryDate}
+                      fluid
+                      placeholder="Selecione a data"
+                      dateFormat="DD/MM/YYYY"
+                      startMode="year"
+                      onChange={handleChangeDate}
                       value={formValues.deliveryDate}
-                      onChange={(e) => {
-                        handleChange(e, "deliveryDate");
-                      }}
                       required
                     />
                   </Form.Field>
                   <Form.Input
                     id="cep"
                     placeholder="CEP"
-                    error={haveError ? cepError : haveError}
+                    error={messages.cep && messages.cep}
                     fluid
                     width={4}
                     icon={iconSearch}

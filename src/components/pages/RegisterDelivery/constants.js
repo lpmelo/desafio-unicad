@@ -4,15 +4,18 @@ export const cepError = {
 };
 
 export const formInitialState = {
-  clientName: "",
-  deliveryDate: "",
-  cep: "",
-  uf: "",
-  city: "",
-  district: "",
-  address: "",
-  number: "",
-  complement: "",
+  formData: {
+    clientName: "",
+    deliveryDate: "",
+    cep: "",
+    uf: "",
+    city: "",
+    district: "",
+    address: "",
+    number: "",
+    complement: "",
+  },
+  messages: {},
 };
 
 export const requiredFields = [
@@ -26,20 +29,6 @@ export const requiredFields = [
   "complement",
 ];
 
-export const validateFields = (fieldId, fieldValue) => {
-  const fieldsId = {
-    clientName: () => genericValidation(fieldValue),
-    cep: () => validateCep(fieldValue),
-    uf: () => genericValidation(fieldValue),
-    city: () => genericValidation(fieldValue),
-    district: () => genericValidation(fieldValue),
-    address: () => genericValidation(fieldValue),
-    number: () => genericValidation(fieldValue),
-  };
-  const fieldValidate = fieldsId[fieldId];
-  return fieldValidate();
-};
-
 const validateCep = (value) => {
   if (value.length < 8) {
     return true;
@@ -52,4 +41,42 @@ const genericValidation = (value) => {
     return true;
   }
   return false;
+};
+
+export const validateFields = (fieldId, fieldValue) => {
+  const fieldsId = {
+    clientName: () => genericValidation(fieldValue),
+    deliveryDate: () => genericValidation(fieldValue),
+    cep: () => validateCep(fieldValue),
+    uf: () => genericValidation(fieldValue),
+    city: () => genericValidation(fieldValue),
+    district: () => genericValidation(fieldValue),
+    address: () => genericValidation(fieldValue),
+    number: () => genericValidation(fieldValue),
+  };
+
+  const fieldValidate =
+    Object.keys(fieldsId).includes(fieldId) && fieldsId[fieldId];
+
+  return fieldValidate ? fieldValidate() : false;
+};
+
+export const fieldsWithErrors = (allFieldIds, state) => {
+  let errorFields = [];
+  let formattedFieldError = {};
+
+  allFieldIds.map((fieldId) => {
+    if (validateFields(fieldId, state[fieldId])) {
+      errorFields.push(fieldId);
+    }
+  });
+
+  errorFields.map((error) => {
+    formattedFieldError = {
+      ...formattedFieldError,
+      [error]: `Campo Obrigatório`,
+    };
+  });
+
+  return formattedFieldError;
 };
