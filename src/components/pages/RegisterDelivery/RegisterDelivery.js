@@ -143,6 +143,12 @@ const RegisterDelivery = () => {
     }
   }, [formValues.cep]);
 
+  useEffect(() => {
+    if (formValues.deliveryDate) {
+      verifyData("deliveryDate");
+    }
+  }, [formValues.deliveryDate]);
+
   return (
     <div>
       <Segment>
