@@ -46,21 +46,29 @@ const RegisterDelivery = () => {
     setSucess(true);
   };
 
-  const hasError = (errorFields) => {
+  const dispatchErrorMessages = (errorFields) => {
     dispatch(changeMessages({ ...errorFields }));
   };
 
   const verifyData = (keysOrFieldId) => {
     if (Array.isArray(keysOrFieldId)) {
       const fieldsWithError = fieldsWithErrors(keysOrFieldId, formValues);
-      hasError(fieldsWithError);
+      const isEmpty = Object.keys(fieldsWithError).length === 0;
+      if (!isEmpty) {
+        setHasError(true);
+        console.log("setou true");
+      } else {
+        setHasError(false);
+      }
+
+      dispatchErrorMessages(fieldsWithError);
     } else {
       const fieldWithError = uniqueFieldWithError(
         keysOrFieldId,
         formValues,
         messages
       );
-      hasError(fieldWithError);
+      dispatchErrorMessages(fieldWithError);
     }
   };
 
@@ -109,10 +117,12 @@ const RegisterDelivery = () => {
   const handleSubmit = () => {
     const formKeys = Object.keys(formValues);
     verifyData(formKeys);
-
+    console.log("HaveErrorState =", haveError);
     if (haveError) {
       setFailed(true);
+      console.log("bateu aqui");
     } else {
+      console.log("bateu no else");
       setFailed(false);
       // const newId = uuidv4();
 
