@@ -86,6 +86,27 @@ export const validateFields = (fieldId, fieldValue) => {
   return fieldValidate ? fieldValidate() : false;
 };
 
+export const uniqueFieldWithError = (fieldId, state, messages) => {
+  let errorField = "";
+  let formattedFieldError = {};
+
+  if (validateFields(fieldId, state[fieldId])) {
+    errorField = fieldId;
+  }
+
+  if (errorField) {
+    formattedFieldError = {
+      ...messages,
+      [errorField]: errorMessage(errorField),
+    };
+  } else {
+    formattedFieldError = { ...messages };
+    delete formattedFieldError[fieldId];
+  }
+
+  return formattedFieldError ? formattedFieldError : "";
+};
+
 export const fieldsWithErrors = (allFieldIds, state) => {
   let errorFields = [];
   let formattedFieldError = {};

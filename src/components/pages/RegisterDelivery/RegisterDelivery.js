@@ -8,6 +8,7 @@ import {
   fieldsWithErrors,
   isValidCep,
   requiredFields,
+  uniqueFieldWithError,
   validateCep,
   validateFields,
 } from "./constants";
@@ -49,9 +50,18 @@ const RegisterDelivery = () => {
     dispatch(changeMessages({ ...errorFields }));
   };
 
-  const verifyData = (keys) => {
-    const fieldsWithError = fieldsWithErrors(keys, formValues);
-    hasError(fieldsWithError);
+  const verifyData = (keysOrFieldId) => {
+    if (Array.isArray(keysOrFieldId)) {
+      const fieldsWithError = fieldsWithErrors(keysOrFieldId, formValues);
+      hasError(fieldsWithError);
+    } else {
+      const fieldWithError = uniqueFieldWithError(
+        keysOrFieldId,
+        formValues,
+        messages
+      );
+      hasError(fieldWithError);
+    }
   };
 
   const handleClearDate = (event, { name, value }) => {
@@ -64,9 +74,14 @@ const RegisterDelivery = () => {
     }
   };
 
+  const handleBlurDate = (event) => {
+    if (event) {
+      verifyData(event.target.id);
+    }
+  };
+
   const handleChange = (event, field) => {
     const value = event.target.value;
-    console.log(event.target);
     if (field === "cep" && value.length < 9) {
       dispatch(changeValue({ changedValue: value, field }));
     } else if (field !== "cep") {
@@ -75,6 +90,8 @@ const RegisterDelivery = () => {
   };
 
   const handleBlur = (event) => {
+    verifyData(event.target.id);
+
     if (requiredFields.includes(event.target.id)) {
       if (validateFields(event.target.id, event.target.value)) {
         setHasError(true);
@@ -86,8 +103,6 @@ const RegisterDelivery = () => {
       getCep(event.target.value).then((res) => threatResponseData(res));
       setHasValue(true);
       setIsDisabled(false);
-    } else {
-      setHasError(true);
     }
   };
 
@@ -190,6 +205,8 @@ const RegisterDelivery = () => {
                       dateFormat="DD/MM/YYYY"
                       startMode="year"
                       onChange={handleChangeDate}
+                      onBlur={handleBlurDate}
+                      closable
                       value={formValues.deliveryDate}
                       required
                     />
@@ -219,6 +236,7 @@ const RegisterDelivery = () => {
                     width={6}
                     value={formValues.city}
                     onChange={(e) => handleChange(e, "city")}
+                    onBlur={(e) => handleBlur(e)}
                     disabled={isDisabled}
                     required
                   />
@@ -230,6 +248,7 @@ const RegisterDelivery = () => {
                     width={2}
                     value={formValues.uf}
                     onChange={(e) => handleChange(e, "uf")}
+                    onBlur={(e) => handleBlur(e)}
                     disabled={isDisabled}
                     required
                   />
@@ -241,6 +260,7 @@ const RegisterDelivery = () => {
                     width={6}
                     value={formValues.address}
                     onChange={(e) => handleChange(e, "address")}
+                    onBlur={(e) => handleBlur(e)}
                     disabled={isDisabled}
                     required
                   />
@@ -253,6 +273,7 @@ const RegisterDelivery = () => {
                     value={formValues.number}
                     disabled={isDisabled}
                     onChange={(e) => handleChange(e, "number")}
+                    onBlur={(e) => handleBlur(e)}
                     required
                   />
                 </Form.Group>
@@ -265,6 +286,7 @@ const RegisterDelivery = () => {
                     width={8}
                     value={formValues.district}
                     onChange={(e) => handleChange(e, "district")}
+                    onBlur={(e) => handleBlur(e)}
                     disabled={isDisabled}
                     required
                   />
