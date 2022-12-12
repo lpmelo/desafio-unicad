@@ -32,6 +32,19 @@ export const registerDeliverySlice = createSlice({
     clearMessages: (state, action) => {
       state.messages = {};
     },
+    onSubmitFailed: (state, action) => {
+      state.submitEvents.submitSuccess = false;
+      state.submitEvents.submitFailed = true;
+    },
+    onSubmitSuccess: (state, action) => {
+      state.submitEvents.submitFailed = false;
+      state.submitEvents.submitSuccess = true;
+    },
+    clearValidations: (state, action) => {
+      state.haveError = false;
+      state.submitEvents.submitFailed = false;
+      state.submitEvents.submitSuccess = false;
+    },
   },
 });
 
@@ -41,5 +54,8 @@ export const {
   clearState,
   changeMessages,
   clearMessages,
+  onSubmitFailed,
+  onSubmitSuccess,
+  clearValidations,
 } = registerDeliverySlice.actions;
 export const registerDeliveryReducer = registerDeliverySlice.reducer;

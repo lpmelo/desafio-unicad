@@ -16,6 +16,10 @@ export const formInitialState = {
     complement: "",
   },
   messages: {},
+  submitEvents: {
+    submitFailed: false,
+    submitSuccess: false,
+  },
 };
 
 export const requiredFields = [

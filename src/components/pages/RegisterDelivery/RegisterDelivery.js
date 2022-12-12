@@ -4,13 +4,9 @@ import { DateInput } from "semantic-ui-calendar-react";
 import "./RegisterDelivery.css";
 import iconSearch from "../../icons/iconSearch";
 import {
-  cepError,
   fieldsWithErrors,
   isValidCep,
-  requiredFields,
   uniqueFieldWithError,
-  validateCep,
-  validateFields,
 } from "./constants";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -19,6 +15,9 @@ import {
   saveGetResponse,
   changeMessages,
   clearMessages,
+  onSubmitFailed,
+  onSubmitSuccess,
+  clearValidations,
 } from "./features/registerDeliverySlice";
 import { getCep } from "../../../ApiCep";
 import iconUserCicle from "../../icons/iconUserCicle";
@@ -27,38 +26,38 @@ import { postNewDelivery } from "../../../Api";
 import { v4 as uuidv4 } from "uuid";
 
 const RegisterDelivery = () => {
-  const [haveError, setHasError] = useState(false);
-  const [success, setSucess] = useState(false);
-  const [failed, setFailed] = useState(false);
   const [hasValue, setHasValue] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
   const formValues = useSelector((state) => state.registerDelivery.formData);
   const messages = useSelector((state) => state.registerDelivery.messages);
+  const { submitSuccess, submitFailed } = useSelector(
+    (state) => state.registerDelivery.submitEvents
+  );
   const activePage = useSelector((state) => state.pageSwitcher.item);
+
   const dispatch = useDispatch();
 
   const threatResponseData = (response) => {
     dispatch(saveGetResponse(response));
   };
 
-  const onSucess = () => {
+  const onSuccess = () => {
     dispatch(clearState(""));
-    setSucess(true);
+    dispatch(onSubmitSuccess());
   };
 
   const dispatchErrorMessages = (errorFields) => {
     dispatch(changeMessages({ ...errorFields }));
   };
 
-  const verifyData = (keysOrFieldId) => {
+  const verifyData = (keysOrFieldId, haveError) => {
     if (Array.isArray(keysOrFieldId)) {
       const fieldsWithError = fieldsWithErrors(keysOrFieldId, formValues);
       const isEmpty = Object.keys(fieldsWithError).length === 0;
       if (!isEmpty) {
-        setHasError(true);
-        console.log("setou true");
+        haveError = true;
       } else {
-        setHasError(false);
+        haveError = false;
       }
 
       dispatchErrorMessages(fieldsWithError);
@@ -69,6 +68,10 @@ const RegisterDelivery = () => {
         messages
       );
       dispatchErrorMessages(fieldWithError);
+    }
+
+    if (haveError) {
+      return haveError;
     }
   };
 
@@ -99,51 +102,41 @@ const RegisterDelivery = () => {
 
   const handleBlur = (event) => {
     verifyData(event.target.id);
-
-    if (requiredFields.includes(event.target.id)) {
-      if (validateFields(event.target.id, event.target.value)) {
-        setHasError(true);
-      }
-    }
-
     if (isValidCep(event.target.name, event.target.value.length)) {
-      setHasError(false);
       getCep(event.target.value).then((res) => threatResponseData(res));
       setHasValue(true);
       setIsDisabled(false);
     }
   };
-
   const handleSubmit = () => {
+    let haveError = false;
     const formKeys = Object.keys(formValues);
-    verifyData(formKeys);
-    console.log("HaveErrorState =", haveError);
-    if (haveError) {
-      setFailed(true);
-      console.log("bateu aqui");
-    } else {
-      console.log("bateu no else");
-      setFailed(false);
-      // const newId = uuidv4();
+    haveError = verifyData(formKeys, haveError);
 
-      // postNewDelivery(
-      //   newId,
-      //   formValues.clientName,
-      //   formValues.deliveryDate,
-      //   formValues.cep,
-      //   formValues.uf,
-      //   formValues.city,
-      //   formValues.district,
-      //   formValues.address,
-      //   formValues.number,
-      //   formValues.complement
-      // ).then((res) => (res.data ? onSucess() : console.log("erro")));
+    if (haveError) {
+      dispatch(onSubmitFailed());
+    } else {
+      const newId = uuidv4();
+
+      postNewDelivery(
+        newId,
+        formValues.clientName,
+        formValues.deliveryDate,
+        formValues.cep,
+        formValues.uf,
+        formValues.city,
+        formValues.district,
+        formValues.address,
+        formValues.number,
+        formValues.complement
+      ).then((res) => (res.data ? onSuccess() : console.log("erro")));
     }
   };
 
   useEffect(() => {
     dispatch(clearState(""));
     dispatch(clearMessages());
+    dispatch(clearValidations());
   }, [activePage]);
 
   useEffect(() => {
@@ -166,7 +159,7 @@ const RegisterDelivery = () => {
           <Grid.Row columns={1}>
             <Grid.Column className="register-title">
               <h1>Cadastrar nova entrega</h1>
-              {success && (
+              {submitSuccess && (
                 <Message
                   success
                   header="Entrega cadastrada com sucesso!"
@@ -174,7 +167,7 @@ const RegisterDelivery = () => {
                 />
               )}
 
-              {failed && (
+              {submitFailed && (
                 <Message
                   error
                   header="Existem erros no preenchimento do cadastro!"
