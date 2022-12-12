@@ -1,32 +1,39 @@
-import React from "react";
-import { Table } from "semantic-ui-react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Segment } from "semantic-ui-react";
+import { getAllDeliveries } from "../../../Api";
+import SemanticUiTable from "../../../lib/elementComponents/SemanticUiTable";
+import { visualizeDeliveriesHeadCells } from "./constants";
+import { saveAllDeliveries } from "./features/visualizeDeliveriesSlice";
 import "./VisualizeDeliveries.css";
+import VisualizeDeliveriesTableRow from "./VisualizeDeliveriesTableRow";
 
 const VisualizeDeliveries = () => {
+  const AllDeliveries = useSelector(
+    (state) => state.visualizeDeliveries.deliveries
+  );
+  const dispatch = useDispatch();
+
+  const onResponseSuccess = (res) => {
+    dispatch(saveAllDeliveries(res));
+  };
+
+  useEffect(() => {
+    getAllDeliveries().then((res) =>
+      res ? onResponseSuccess(res) : console.log("erro")
+    );
+  }, []);
   return (
     <div className="table-container">
-      <Table color={"green"} key={"green"}>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Food</Table.HeaderCell>
-            <Table.HeaderCell>Calories</Table.HeaderCell>
-            <Table.HeaderCell>Protein</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-
-        <Table.Body>
-          <Table.Row>
-            <Table.Cell>Apples</Table.Cell>
-            <Table.Cell>200</Table.Cell>
-            <Table.Cell>0g</Table.Cell>
-          </Table.Row>
-          <Table.Row>
-            <Table.Cell>Orange</Table.Cell>
-            <Table.Cell>310</Table.Cell>
-            <Table.Cell>0g</Table.Cell>
-          </Table.Row>
-        </Table.Body>
-      </Table>
+      <Segment>
+        <SemanticUiTable
+          color={"green"}
+          key={"green"}
+          headCells={visualizeDeliveriesHeadCells}
+          SemanticUiTableRow={VisualizeDeliveriesTableRow}
+          data={AllDeliveries}
+        />
+      </Segment>
     </div>
   );
 };
