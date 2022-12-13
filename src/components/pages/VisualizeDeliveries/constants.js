@@ -8,3 +8,5 @@ export const visualizeDeliveriesHeadCells = [
   "Cidade",
   "Data da entrega",
 ];
+
+export const registerTableHeadCells = ["Dados do Registro", "Navegação"];

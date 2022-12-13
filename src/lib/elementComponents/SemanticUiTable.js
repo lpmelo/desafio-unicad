@@ -7,6 +7,7 @@ const SemanticUiTable = ({
   headCells,
   SemanticUiTableRow,
   data,
+  subTable,
 }) => {
   return (
     <Table color={color} key={key}>
@@ -19,7 +20,13 @@ const SemanticUiTable = ({
       </Table.Header>
 
       <Table.Body>
-        {data.length ? (
+        {subTable ? (
+          data ? (
+            <SemanticUiTableRow props={data} />
+          ) : (
+            <></>
+          )
+        ) : data.length ? (
           data.map((rowData) => {
             return <SemanticUiTableRow props={rowData} />;
           })
