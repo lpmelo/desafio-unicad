@@ -19,10 +19,13 @@ const SemanticUiTable = ({
       </Table.Header>
 
       <Table.Body>
-        {data.length &&
+        {data.length ? (
           data.map((rowData) => {
             return <SemanticUiTableRow props={rowData} />;
-          })}
+          })
+        ) : (
+          <></>
+        )}
       </Table.Body>
     </Table>
   );

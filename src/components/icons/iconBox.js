@@ -1,6 +1,6 @@
 import React from "react";
 import { Icon } from "semantic-ui-react";
 
-const iconBox = () => <Icon name="box"></Icon>;
+const IconBox = () => <Icon name="box"></Icon>;
 
-export default iconBox;
+export default IconBox;

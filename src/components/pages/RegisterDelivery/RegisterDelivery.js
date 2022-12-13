@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Form, Grid, Message, Segment } from "semantic-ui-react";
 import { DateInput } from "semantic-ui-calendar-react";
 import "./RegisterDelivery.css";
-import iconSearch from "../../icons/iconSearch";
+import IconSearch from "../../icons/IconSearch";
 import {
   fieldsWithErrors,
   isValidCep,
@@ -20,8 +20,8 @@ import {
   clearValidations,
 } from "./features/registerDeliverySlice";
 import { getCep } from "../../../ApiCep";
-import iconUserCicle from "../../icons/iconUserCicle";
-import iconPlus from "../../icons/iconPlus";
+import IconUserCicle from "../../icons/IconUserCicle";
+import IconPlus from "../../icons/IconPlus";
 import { postNewDelivery } from "../../../Api";
 import { v4 as uuidv4 } from "uuid";
 
@@ -178,7 +178,7 @@ const RegisterDelivery = () => {
           </Grid.Row>
           <Grid.Row className="row-form" columns={1}>
             <Button
-              icon={iconPlus}
+              icon={IconPlus}
               content="Incluir"
               className="btn-submit"
               onClick={() => handleSubmit()}
@@ -192,7 +192,7 @@ const RegisterDelivery = () => {
                     error={messages.clientName && messages.clientName}
                     fluid
                     width={8}
-                    icon={iconUserCicle}
+                    icon={IconUserCicle}
                     iconPosition="left"
                     label="Nome do Cliente"
                     value={formValues.clientName}
@@ -227,7 +227,7 @@ const RegisterDelivery = () => {
                     error={messages.cep && messages.cep}
                     fluid
                     width={4}
-                    icon={iconSearch}
+                    icon={IconSearch}
                     iconPosition="left"
                     label="CEP"
                     value={formValues.cep}
