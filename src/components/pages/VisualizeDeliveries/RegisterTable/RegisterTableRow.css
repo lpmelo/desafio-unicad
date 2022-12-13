@@ -1,0 +1,12 @@
+.map-container {
+  height: 300px;
+}
+
+.deliveries-data-list {
+  height: 359px;
+}
+
+.list-item {
+  margin-top: 5%;
+  cursor: default;
+}

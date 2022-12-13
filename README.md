@@ -26,20 +26,58 @@ Preenchimento automático com cep:
     <img src="public/images/Cep.png" width="500">
 </p>
 
-Desenvolvi uma validação e estruturei para adicionar outras, mas devido ao tempo, consegui criar essa totalmente funcional:
+Desenvolvi validações para todos os campos nos quais setei como obrigatórios, sendo assim, todos os campos com (\*) irão receber uma mensagem definida de acordo com o que o dev definir, não precisando ser necessáriamente 'campo obrigatório':
 
 <p align="center">
-    <img src="public/images/FirstValidation.png" width="500">
+    <img src="public/images/ValidationsExample.png" width="500">
 </p>
 
-Demonstração do redux em funcionamento:
+Exemplo da validação com texto definido no front pelo dev para o campo cep:
+
+<p align="center">
+    <img src="public/images/CepValidation.png" width="500">
+</p>
+
+Demonstração do cadastro em funcionamento com redux:
+
+Formulário com valores inseridos:
 
 <p align="center">
     <img src="public/images/FormWithValues.png" width="500">
 </p>
 
+Formulário após clicar em 'Incluir':
+
+<p align="center">
+    <img src="public/images/DeliverySubmited.png" width="500">
+</p>
+
+Redux em funcionamento:
+
 <p align="center">
     <img src="public/images/redux.png" width="500">
+</p>
+
+Visualizando cadastros:
+
+<p align="center">
+    <img src="public/images/VisualizeDeliveries.png" width="500">
+</p>
+
+Ao expandir cada cadastro, informações mais detalhadas irão surgir, junto ao mapa do google maps referenciando o endereço cadastrado:
+
+<p align="center">
+    <img src="public/images/MapsExample.png" width="500">
+</p>
+
+### Variáveis de ambiente
+
+Para que o projeto funcione, é necessário configurar as váriáveis de ambiente, que no caso deste projeto, seria a chave para a API do Google.
+
+É necessário que o dev crie um arquivo .env.local e dentro dele coloque a variável com a chave da API:
+
+<p align="center">
+    <img src="public/images/envExample.png" width="500">
 </p>
 
 ### Funcionalidades
@@ -48,7 +86,11 @@ Demonstração do redux em funcionamento:
 - [x] Implementação do Redux Toolkit
 - [x] Página inicial
 - [x] Página para cadastro de novas entregas
-- [ ] Página para visualizar cadastros
+- [x] Página para visualizar cadastros
+- [x] Utilização de Semantic Ui React
+- [x] Criação de componentes
+- [x] Utilização de variáveis de ambiente
 - [x] Integração com API busca Cep
-- [ ] Integração com API do Google Maps
-- [ ] Integração com backend desenvolvido por mim
+- [x] Integração com API do Google Maps
+- [x] Integração com API do Google Geocode
+- [x] Integração com backend desenvolvido por mim

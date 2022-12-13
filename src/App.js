@@ -1,7 +1,6 @@
 import "./App.css";
 import { Menu, Segment } from "semantic-ui-react";
 import { useState } from "react";
-import iconHome from "./components/icons/iconHome";
 import { useDispatch, useSelector } from "react-redux";
 import {
   switchToHome,
@@ -10,8 +9,10 @@ import {
 } from "./features/pageSwitcher/pageSwitcherSlice";
 import HomePage from "./components/pages/HomePage/HomePage";
 import RegisterDelivery from "./components/pages/RegisterDelivery/RegisterDelivery";
-import iconBox from "./components/icons/iconBox";
-import iconEye from "./components/icons/iconEye";
+import VisualizeDeliveries from "./components/pages/VisualizeDeliveries/VisualizeDeliveries";
+import IconBox from "./components/icons/IconBox";
+import IconEye from "./components/icons/IconEye";
+import IconHome from "./components/icons/IconHome";
 
 const App = () => {
   const [activeItem, setActiveItem] = useState("home");
@@ -21,7 +22,7 @@ const App = () => {
     const index = {
       0: <HomePage />,
       1: <RegisterDelivery />,
-      2: <HomePage />,
+      2: <VisualizeDeliveries />,
     };
 
     const formattedIndex = index[pageElementNumber];
@@ -41,23 +42,23 @@ const App = () => {
   return (
     <div className="App">
       <div className="header-container">
-        <Segment inverted>
-          <Menu inverted pointing secondary>
+        <Segment inverted className="menu-container">
+          <Menu inverted pointing secondary className="menu">
             <Menu.Item
               name="home"
-              icon={iconHome}
+              icon={IconHome}
               active={activeItem === "home"}
               onClick={handleItemClick}
             />
             <Menu.Item
               name="Cadastro de entregas"
-              icon={iconBox}
+              icon={IconBox}
               active={activeItem === "Cadastro de entregas"}
               onClick={handleItemClick}
             />
             <Menu.Item
               name="Visualizar entregas"
-              icon={iconEye}
+              icon={IconEye}
               active={activeItem === "Visualizar entregas"}
               onClick={handleItemClick}
             />

@@ -32,6 +32,14 @@
   margin: 10px;
 }
 
+.menu-container {
+  background-color: #1f7ddb !important;
+}
+
+.menu {
+  border: 0 !important;
+}
+
 .footer-container {
   position: fixed;
   left: 0;
